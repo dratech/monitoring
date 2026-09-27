@@ -17,6 +17,7 @@ public class AlertService {
   private final AlertRepository alertRepository;
   private final SensorRepository sensorRepository;
   private final KafkaTemplate<String, AlertDto> kafkaTemplate;
+  private static final String ALERT_TOPIC = "alerts";
 
   public AlertService(AlertRepository alertRepository, SensorRepository sensorRepository,
       KafkaTemplate<String, AlertDto> kafkaTemplate) {
@@ -26,8 +27,16 @@ public class AlertService {
   }
 
   public Alert saveAlert(AlertDto alertDto) {
-    // TODO: Task 6
-    return null;
+    var sensor = sensorRepository.findById(alertDto.sensorId())
+            .orElseThrow(); //should throw a custom exception and handle differently for HTTP and kafka
+
+    var alert = alertRepository.save(new Alert(alertDto.message(), alertDto.timestamp(), sensor));
+
+    //Depending on what consumes this topic and how critical these alerts are, it might be wise to add an
+    //outbox pattern here, so alerts are not lost even if the app crashes or connection to the kafka cluster is lost
+    kafkaTemplate.send(ALERT_TOPIC, alertDto);
+
+    return alert;
   }
 
   public AlertDto findLastAlertBySensorId(UUID sensorId) {
