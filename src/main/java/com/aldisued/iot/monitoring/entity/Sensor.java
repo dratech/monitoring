@@ -21,6 +21,12 @@ public class Sensor {
   @Enumerated(EnumType.STRING) // Tests will pass, but if we have older data in the database, we will need to migrate it.
   private SensorType type;
 
+  @OneToMany(mappedBy = "sensor")
+  private List<SensorReading> sensorReadings;
+
+  @OneToMany(mappedBy = "sensor")
+  private List<Alert> alerts;
+
   public Sensor() {}
 
   public Sensor(String name, SensorType type) {
@@ -53,22 +59,20 @@ public class Sensor {
   }
 
   public List<Alert> getAlerts() {
-    //TODO: Task 2
-    return null;
+    return this.alerts;
   }
 
   public void setAlerts(List<Alert> alerts) {
-    //TODO: Task 2
+    this.alerts = alerts;
   }
 
   public List<SensorReading> getSensorReadings() {
-    //TODO: Task 2
-    return null;
+    return this.sensorReadings;
   }
 
   public void setSensorReadings(
       List<SensorReading> sensorReadings) {
-    //TODO: Task 2
+    this.sensorReadings = sensorReadings;
   }
 
   @Override

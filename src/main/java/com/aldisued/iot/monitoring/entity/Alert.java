@@ -1,11 +1,7 @@
 package com.aldisued.iot.monitoring.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Table(name = "alerts")
@@ -22,6 +18,9 @@ public class Alert {
   @Column(nullable = false)
   private LocalDateTime timestamp;
 
+  @ManyToOne
+  private Sensor sensor;
+
   public Alert() {
   }
 
@@ -32,7 +31,7 @@ public class Alert {
   ) {
     this.message = message;
     this.timestamp = timestamp;
-    //TODO: Task 2
+    this.sensor = sensor;
   }
 
   public Long getId() {
@@ -61,10 +60,11 @@ public class Alert {
 
   public Sensor getSensor() {
     //TODO: Task 2
-    return null;
+    return this.sensor;
   }
 
   public void setSensor(Sensor sensor) {
     //TODO: Task 2
+    this.sensor = sensor;
   }
 }
