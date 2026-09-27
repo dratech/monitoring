@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @Import(TestcontainersConfiguration.class)
-@ActiveProfiles("local")
+@ActiveProfiles("docker")
 public class IntegrationTestBase {
 
 }
