@@ -5,6 +5,7 @@ import com.aldisued.iot.monitoring.entity.SensorReading;
 import com.aldisued.iot.monitoring.repository.SensorReadingRepository;
 import com.aldisued.iot.monitoring.repository.SensorRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SensorReadingService {
@@ -18,9 +19,13 @@ public class SensorReadingService {
     this.sensorRepository = sensorRepository;
   }
 
+  @Transactional
   public SensorReading saveSensorReading(SensorReadingDto sensorReadingDto) {
-    //TODO: Task 3
-    return null;
+    var sensor = sensorRepository.findById(sensorReadingDto.sensorId())
+            .orElseThrow(); //should set up proper exception and handle it upstream, could be different for HTTP and kafka
+
+    var mappedEntity = new SensorReading(sensorReadingDto.value(), sensorReadingDto.timestamp(), sensor);
+    return sensorReadingRepository.save(mappedEntity);
   }
 
 }
